@@ -87,11 +87,11 @@
     }
   }
 
-  function start(fn) {
+  function sink(fn) {
     fn(test, ok);
     init();
   }
 
-  expose(start);
+  expose(sink);
 
 }(window);
