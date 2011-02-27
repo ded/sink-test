@@ -2,7 +2,8 @@
   var total = 0,
       testing = false,
       fail = false,
-      tests = [];
+      tests = [],
+      item;
 
   function reset() {
     total = 0;
@@ -23,10 +24,18 @@
     reset();
   }
 
+  function bind(li) {
+    li.onclick = function() {
+      this.getElementsByTagName('ul')[0].className = 'show';
+    };
+  }
+
   function _test(name, expect, fn) {
     total = expect;
     var li = document.createElement('li');
-    li.innerHTML = name + ' ... <span>o</span>';
+    li.innerHTML = name + ' ... <span>o</span><ul></ul>';
+    item = li.getElementsByTagName('ul')[0];
+    bind(li);
     var start = +new Date;
     var check = li.getElementsByTagName('span')[0];
     document.getElementById('tests').appendChild(li);
@@ -62,6 +71,9 @@
   }
 
   function ok(b, message) {
+    var li = document.createElement('li');
+    li.innerHTML = message + ' ' + (b ? '✓' : '×');
+    item.appendChild(li);
     if (b) {
       total--;
     } else {

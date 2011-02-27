@@ -21,11 +21,15 @@ ol {
   padding: 10px;
 }
 li {
-  margin: 2px 5px;
+  margin: 3px 5px;
   padding: 5px;
   -webkit-border-radius: 5px;
   -moz-border-radius: 5px;
   overflow: hidden;
+}
+ol > li {
+  opacity: 0;
+  cursor: pointer;
 }
 li span {
   color: #aaa;
@@ -44,4 +48,32 @@ li.fail {
 }
 li.pass {
   background-color: #bdfcc9;
+}
+li.pass, li.fail {
+  -webkit-transition: opacity .5s linear;
+  opacity: 1;
+}
+li ul {
+  height: 0;
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+li.pass ul.show {
+  -webkit-box-shadow: 0 0 5px green;
+}
+li.fail ul.show {
+  -webkit-box-shadow: 0 0 5px red;
+}
+li ul.show {
+  height: auto;
+  padding: 5px;
+  -webkit-border-radius: 5px;
+  margin: 5px;
+}
+li ul li {
+  padding: 0;
+  margin: 2px 0;
+  list-style: none;
 }
