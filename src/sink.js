@@ -87,6 +87,11 @@
     }
   }
 
-  expose(init, test, ok);
+  function start(fn) {
+    fn(test, ok);
+    init();
+  }
+
+  expose(start);
 
 }(window);

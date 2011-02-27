@@ -11,13 +11,14 @@
     <ol id="tests"></ol>
 
     <script>
-      test('should pass', 1, function() {
-        ok(true);
+      start(function(t, k) {
+        t('should pass', 1, function() {
+          k(true, 'make a note');
+        });
+        t('should not pass', 1, function() {
+          k(false, 'make another note');
+        });
       });
-      test('should not pass', 1, function() {
-        ok(false);
-      });
-      init();
     </script>
 
   </body>
