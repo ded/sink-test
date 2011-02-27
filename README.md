@@ -15,3 +15,20 @@ How to write a Sink test
         ok(resp.stat == '200');
       });
     });
+
+Loading a suite of tests
+------------------------
+
+The above example illustrates the basic syntax of a single test, however loading your tests is done via the start module which exports the test and ok methods. See the example below:
+
+    start(function(test, ok) {
+      test('should have foo', 2, function() {
+        ok(true, 'this is basically true');
+        ok(1 == 1, 'also true for you math majors');
+      });
+    });
+
+Browser support
+---------------
+
+  * Any browser that supports JavaScript
