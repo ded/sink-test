@@ -11,20 +11,21 @@
     <ol id="tests"></ol>
 
     <script>
-      test('should pass', 1, function() {
-        ok(true, 'this is true');
+      start(function(test, ok) {
+        test('should pass', 1, function() {
+          ok(true, 'this is true');
+        });
+        test('should not pass', 2, function() {
+          ok(false, 'this is false');
+          ok(true, 'doesn\'t matter if this passes');
+        });
+        test('this is another', 1, function() {
+          ok(true, 'foo');
+        });
+        test('and yet even another', 1, function() {
+          ok(true, 'bar');
+        });
       });
-      test('should not pass', 2, function() {
-        ok(false, 'this is false');
-        ok(true, 'doesn\'t matter if this passes');
-      });
-      test('this is another', 1, function() {
-        ok(true, 'foo');
-      });
-      test('and yet even another', 1, function() {
-        ok(true, 'bar');
-      });
-      init();
     </script>
 
   </body>
