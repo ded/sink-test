@@ -32,3 +32,4 @@ Browser support
 ---------------
 
   * Any browser that supports JavaScript
+  * Lynx
