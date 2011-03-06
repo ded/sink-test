@@ -1,9 +1,13 @@
-!function(win) {
+!function(context) {
   var total = 0,
       testing = false,
       fail = false,
       tests = [],
-      item;
+      item,
+      allPass = true,
+      isHeadless = (typeof module !== 'undefined' && module.exports);
+
+  isHeadless && require('colors');
 
   function reset() {
     total = 0;
@@ -13,14 +17,23 @@
   }
 
   function failure(li, check) {
-    check.innerHTML = '×';
-    li.className = 'fail';
+    allPass = false;
+    if (isHeadless) {
+      // console.log('x');
+    } else {
+      check.innerHTML = '×';
+      li.className = 'fail';
+    }
     reset();
   }
 
   function pass(li, check) {
-    check.innerHTML = '✓';
-    li.className = 'pass';
+    if (isHeadless) {
+      // console.log('✓');
+    } else {
+      check.innerHTML = '✓';
+      li.className = 'pass';
+    }
     reset();
   }
 
@@ -32,13 +45,19 @@
 
   function _test(name, expect, fn) {
     total = expect;
-    var li = document.createElement('li');
-    li.innerHTML = name + ' ... <span>o</span><ul></ul>';
-    item = li.getElementsByTagName('ul')[0];
-    bind(li);
+    var li, check;
+    if (!isHeadless) {
+      li = document.createElement('li');
+      li.innerHTML = name + ' ... <span>o</span><ul></ul>';
+      item = li.getElementsByTagName('ul')[0];
+      bind(li);
+      check = li.getElementsByTagName('span')[0];
+      document.getElementById('tests').appendChild(li);
+    } else {
+      console.log(name + '...');
+    }
+
     var start = +new Date;
-    var check = li.getElementsByTagName('span')[0];
-    document.getElementById('tests').appendChild(li);
     fn();
     setTimeout(function() {
       if (+new Date - start > 10000) {
@@ -67,13 +86,31 @@
     if (tests.length > 0) {
       var o = tests.shift();
       _test(o.name, o.expect, o.fn);
+    } else {
+      // tests are done
+      var message = [
+        'Congratulations! All tests have passed!',
+        'There were some errors! The suite has failed.'
+      ];
+      if (isHeadless) {
+        console.log(message[allPass ? 0 : 1].toUpperCase().rainbow);
+      }
     }
   }
 
   function ok(b, message) {
-    var li = document.createElement('li');
-    li.innerHTML = message + ' ' + (b ? '✓' : '×');
-    item.appendChild(li);
+    if (isHeadless) {
+      if (b) {
+        console.log((message + ' ✓').green);
+      } else {
+        console.log(message + ' ×'.red);
+      }
+    } else {
+      var li = document.createElement('li');
+      li.innerHTML = message + ' ' + (b ? '✓' : '×');
+      item.appendChild(li);
+    }
+
     if (b) {
       total--;
     } else {
@@ -83,7 +120,7 @@
 
   function expose() {
     for (var i=0; i < arguments.length; i++) {
-      window[arguments[i].name] = arguments[i];
+      context[arguments[i].name] = arguments[i];
     }
   }
 
@@ -92,6 +129,11 @@
     init();
   }
 
-  expose(sink);
 
-}(window);
+  if (isHeadless) {
+    module.exports = sink;
+  } else {
+    expose(sink);
+  }
+
+}(this);
