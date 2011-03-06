@@ -1,0 +1,11 @@
+{
+  "name": "sink",
+  "description": "test your javascript - headless, or in the browser",
+  "version": "0.0.1",
+  "authors": ["Dustin Diaz <@ded>", "Jacob Thornton <@fat>"],
+  "keywords": ["testing", "unit tests", "headless", "boosh", "luke warm"],
+  "main": "./sink.js",
+  "engines": {
+    "node": ">= 0.1.0"
+  }
+}
