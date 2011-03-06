@@ -19,7 +19,7 @@ How to write a Sink test
 Loading a suite of tests
 ------------------------
 
-The above example illustrates the basic syntax of a single test, however loading your tests is done via the start module which exports the test and ok methods. See the example below:
+The above example illustrates the basic syntax of a single test, however loading your tests is done via the *sink* module which exports the test and ok methods. See the example below:
 
     sink(function(test, ok) {
       test('should have foo', 2, function() {
@@ -31,5 +31,17 @@ The above example illustrates the basic syntax of a single test, however loading
 Browser support
 ---------------
 
-  * Any browser that supports JavaScript
-  * Lynx
+Any browser that supports JavaScript as well as Headless via command line with Node. (see below)
+
+    // tests.js
+    var sink = require('/path/to/sink');
+
+    sink(function (test, ok) {
+      // write tests
+    });
+
+in your terminal
+
+    % node tests.js
+
+Happy testing!
