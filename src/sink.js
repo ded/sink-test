@@ -1,10 +1,17 @@
+/*!
+  * Sink - Browser & Headless JavaScript Unit Tester
+  * copyright Dustin Diaz & Jacob Thornton
+  *
+  */
 !function(context) {
   var total = 0,
-      testing = false,
       fail = false,
       tests = [],
       item,
-      allPass = true,
+      setPasses = true,
+      beforeMethods = [],
+      afterMethods = [],
+      currentSetName,
       isHeadless = (typeof module !== 'undefined' && module.exports);
 
   isHeadless && require('colors');
@@ -12,29 +19,36 @@
   function reset() {
     total = 0;
     fail = false;
-    testing = false;
     init();
   }
 
   function failure(li, check) {
-    allPass = false;
-    if (isHeadless) {
-      // console.log('x');
-    } else {
-      check.innerHTML = '×';
+    setPasses = false;
+    if (!isHeadless) {
+      check.innerHTML = '✗';
       li.className = 'fail';
     }
     reset();
   }
 
   function pass(li, check) {
-    if (isHeadless) {
-      // console.log('✓');
-    } else {
+    if (!isHeadless) {
       check.innerHTML = '✓';
       li.className = 'pass';
     }
     reset();
+  }
+
+  function before(fn) {
+    fn ? beforeMethods.push(fn) : beforeMethods.forEach(function (f) {
+      f();
+    });
+  }
+
+  function after(fn) {
+    fn ? afterMethods.push(fn) : afterMethods.forEach(function (f) {
+      f();
+    });
   }
 
   function bind(li) {
@@ -44,6 +58,7 @@
   }
 
   function _test(name, expect, fn) {
+    before();
     total = expect;
     var li, check;
     if (!isHeadless) {
@@ -54,7 +69,7 @@
       check = li.getElementsByTagName('span')[0];
       document.getElementById('tests').appendChild(li);
     } else {
-      console.log(name + '...');
+      console.log((name + '...').yellow);
     }
 
     var start = +new Date;
@@ -62,16 +77,19 @@
     setTimeout(function() {
       if (+new Date - start > 10000) {
         failure(li, check);
+        after();
       } else {
         if (fail) {
           failure(li, check);
+          after();
         } else if (!total) {
+          after();
           pass(li, check);
         } else {
-          setTimeout(arguments.callee, 50);
+          setTimeout(arguments.callee, 10);
         }
       }
-    }, 50);
+    }, 10);
   }
 
   function test(name, expect, fn) {
@@ -83,18 +101,12 @@
   }
 
   function init() {
-    if (tests.length > 0) {
+    if (tests.length) {
       var o = tests.shift();
       _test(o.name, o.expect, o.fn);
     } else {
-      // tests are done
-      var message = [
-        'Congratulations! All tests have passed!',
-        'There were some errors! The suite has failed.'
-      ];
-      if (isHeadless) {
-        console.log(message[allPass ? 0 : 1].toUpperCase().rainbow);
-      }
+      setPasses = true;
+      start();
     }
   }
 
@@ -103,11 +115,11 @@
       if (b) {
         console.log((message + ' ✓').green);
       } else {
-        console.log(message + ' ×'.red);
+        console.log((message + ' ✗').red);
       }
     } else {
       var li = document.createElement('li');
-      li.innerHTML = message + ' ' + (b ? '✓' : '×');
+      li.innerHTML = message + ' ' + (b ? '✓' : '✗');
       item.appendChild(li);
     }
 
@@ -124,16 +136,47 @@
     }
   }
 
-  function sink(fn) {
-    fn(test, ok);
+  var modules = [];
+
+  function sink(name, fn) {
+    modules.push({
+      name: name,
+      fn: fn
+    });
+  }
+
+  function nextGroup(name, fn) {
+    beforeMethods = [];
+    afterMethods = [];
+    console.log('MODULE: ' + name);
+    fn(test, ok, before, after);
+    currentSetName = name;
     init();
   }
 
+  function start() {
+    var current = modules.shift();
+    current ? nextGroup(current.name, current.fn) : !function () {
+      var message = [
+        'Congratulations! All tests have passed!',
+        'There were some errors! The suite has failed.'
+      ];
+      if (isHeadless) {
+        message = message[setPasses ? 0 : 1].toUpperCase();
+        if (setPasses) {
+          console.log(message.rainbow);
+        } else {
+          console.log(message.red);
+        }
+      }
+    }();
+  }
 
   if (isHeadless) {
-    module.exports = sink;
+    exports.sink = sink;
+    exports.start = start;
   } else {
-    expose(sink);
+    expose(sink, start);
   }
 
 }(this);

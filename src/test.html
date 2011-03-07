@@ -9,24 +9,7 @@
   <body>
     <h1>Sink Tests</h1>
     <ol id="tests"></ol>
-
-    <script>
-      sink(function(test, ok) {
-        test('should pass', 1, function() {
-          ok(true, 'this is true');
-        });
-        test('should not pass', 2, function() {
-          ok(false, 'this is false');
-          ok(true, 'doesn\'t matter if this passes');
-        });
-        test('this is another', 1, function() {
-          ok(true, 'foo');
-        });
-        test('and yet even another', 1, function() {
-          ok(true, 'bar');
-        });
-      });
-    </script>
-
+    <!-- external script file, allows for headless testing -->
+    <script src="../tests.js"></script>
   </body>
 </html>

@@ -11,14 +11,15 @@
     <ol id="tests"></ol>
 
     <script>
-      sink(function(t, k) {
-        t('should pass', 1, function() {
-          k(true, 'make a note');
+      sink('module name', function(test, ok, before, after) {
+        test('should pass', 1, function() {
+          ok(true, 'make a note');
         });
-        t('should not pass', 1, function() {
-          k(false, 'make another note');
+        test('should not pass', 1, function() {
+          ok(false, 'make another note');
         });
       });
+      start();
     </script>
 
   </body>
