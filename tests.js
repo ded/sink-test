@@ -26,6 +26,7 @@ sink('secondary set', function (t, k, b, a) {
   b(function () {
     console.log('secondary before');
   });
+
   a(function () {
     console.log('secondary after');
   });
