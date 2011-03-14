@@ -61,15 +61,16 @@ li ul {
   list-style: none;
 }
 li.pass ul.show {
-  -webkit-box-shadow: 0 0 5px green;
+  background-color: #8fffa3;
 }
 li.fail ul.show {
-  -webkit-box-shadow: 0 0 5px red;
+  background-color: #efada4;
 }
 li ul.show {
   height: auto;
   padding: 5px;
   -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
   margin: 5px;
 }
 li ul li {
