@@ -1,4 +1,4 @@
-sink('initial set', function (test, ok, before, after) {
+sink('first pass', function (test, ok, before, after) {
 
   before(function () {
     console.log('BEFORE');
@@ -8,7 +8,7 @@ sink('initial set', function (test, ok, before, after) {
     console.log('AFTER');
   });
 
-  test('should pass a test', 2, function () {
+  test('should pass a test thing or two', 2, function () {
     ok(true, 'first thing');
     ok(true, 'second thing');
   });
