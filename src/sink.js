@@ -15,12 +15,14 @@
       isHeadless = (typeof module !== 'undefined' && module.exports);
 
   isHeadless ? require('colors') : !function () {
-    ['red', 'green', 'magenta', 'rainbow', 'yellow'].forEach(function (color) {
-      String.prototype.__defineGetter__(color, function () {
-        return this.replace(/( )/, '$1'); // stupid workaround to not log an object
+      ['red', 'green', 'magenta', 'rainbow', 'yellow'].forEach(function (color) {
+        String.prototype.__defineGetter__(color, function () {
+          return this.replace(/( )/, '$1'); // stupid workaround to not log an object
+        });
+        String.prototype.__defineSetter__(color, function (v) {});
       });
-    });
-  }();
+    }();
+
 
   function reset() {
     total = 0;
