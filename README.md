@@ -36,6 +36,12 @@ The above example illustrates the basic syntax of a single test, however loading
       });
     });
 
+    sink('another module', function (t, o, b, a) {
+      test('a failure', 1, function () {
+        ok(1 == 2, 'should fail');
+      });
+    });
+
     start(); // start all test modules
 
 Browser support

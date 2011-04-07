@@ -1,3 +1,3 @@
-var sink = require('../src/sink');
-var start = sink.start;
-sink = sink.sink;
+var o = require('../src/sink'),
+    start = o.start,
+    sink = o.sink;

@@ -1,21 +1,24 @@
 /*!
   * Sink - Browser & Headless JavaScript Unit Tester
   * copyright Dustin Diaz & Jacob Thornton
-  *
+  * https://github.com/ded/sink-test
+  * License MIT
   */
 !function(context) {
   var total = 0,
       fail = false,
+      modules = [],
       tests = [],
       item,
       setPasses = true,
+      allPass = true,
       beforeMethods = [],
       afterMethods = [],
       currentSetName,
       isHeadless = (typeof module !== 'undefined' && module.exports);
 
-  isHeadless ? require('colors') : !function () {
-      ['red', 'green', 'magenta', 'rainbow', 'yellow'].forEach(function (color) {
+  isHeadless ? (require('colors')) : !function () {
+      each(['red', 'green', 'magenta', 'rainbow', 'yellow'], function (color) {
         String.prototype.__defineGetter__(color, function () {
           return this.replace(/( )/, '$1'); // stupid workaround to not log an object
         });
@@ -32,11 +35,18 @@
 
   function failure(li, check) {
     setPasses = false;
+    allPass = false;
     if (!isHeadless) {
       check.innerHTML = '✗';
       li.className = 'fail';
     }
     reset();
+  }
+
+  function each(items, fn) {
+    for (var i = 0; i < items.length; i++) {
+      fn(items[i]);
+    }
   }
 
   function pass(li, check) {
@@ -48,13 +58,13 @@
   }
 
   function before(fn) {
-    fn ? beforeMethods.push(fn) : beforeMethods.forEach(function (f) {
+    fn ? beforeMethods.push(fn) : each(beforeMethods, function (f) {
       f();
     });
   }
 
   function after(fn) {
-    fn ? afterMethods.push(fn) : afterMethods.forEach(function (f) {
+    fn ? afterMethods.push(fn) : each(afterMethods, function (f) {
       f();
     });
   }
@@ -138,14 +148,6 @@
     }
   }
 
-  function expose() {
-    for (var i=0; i < arguments.length; i++) {
-      context[arguments[i].name] = arguments[i];
-    }
-  }
-
-  var modules = [];
-
   function sink(name, fn) {
     modules.push({
       name: name,
@@ -170,8 +172,8 @@
         'There were some errors! The suite has failed.'
       ];
       if (isHeadless) {
-        message = message[setPasses ? 0 : 1].toUpperCase();
-        if (setPasses) {
+        message = message[allPass ? 0 : 1].toUpperCase();
+        if (allPass) {
           console.log(message.rainbow);
         } else {
           console.log(message.red);
@@ -184,7 +186,8 @@
     exports.sink = sink;
     exports.start = start;
   } else {
-    expose(sink, start);
+    context.sink = sink
+    context.start = start;
   }
 
 }(this);
