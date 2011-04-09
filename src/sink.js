@@ -17,7 +17,7 @@
       currentSetName,
       isHeadless = (typeof module !== 'undefined' && module.exports);
 
-  isHeadless ? (require('colors')) : !function () {
+  isHeadless ? (require('colors')) : String.prototype.__defineGetter__ && !function () {
       each(['red', 'green', 'magenta', 'rainbow', 'yellow'], function (color) {
         String.prototype.__defineGetter__(color, function () {
           return this.replace(/( )/, '$1'); // stupid workaround to not log an object
