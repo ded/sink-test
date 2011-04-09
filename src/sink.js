@@ -87,7 +87,7 @@
       check = li.getElementsByTagName('span')[0];
       document.getElementById('tests').appendChild(li);
     } else {
-      console.log((name + '...').yellow);
+      console && console.log((name + '...').yellow);
     }
 
     var start = +new Date;
@@ -131,9 +131,9 @@
   function ok(b, message) {
     if (isHeadless) {
       if (b) {
-        console.log((message + ' ✓').green);
+        console && console.log((message + ' ✓').green);
       } else {
-        console.log((message + ' ✗').red);
+        console && console.log((message + ' ✗').red);
       }
     } else {
       var li = document.createElement('li');
@@ -158,7 +158,7 @@
   function nextGroup(name, fn) {
     beforeMethods = [];
     afterMethods = [];
-    console.log(('MODULE: ' + name).magenta);
+    console && console.log(('MODULE: ' + name).magenta);
     fn(test, ok, before, after);
     currentSetName = name;
     init();
@@ -174,9 +174,9 @@
       if (isHeadless) {
         message = message[allPass ? 0 : 1].toUpperCase();
         if (allPass) {
-          console.log(message.rainbow);
+          console && console.log(message.rainbow);
         } else {
-          console.log(message.red);
+          console && console.log(message.red);
         }
       }
     }();
