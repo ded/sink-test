@@ -26,6 +26,9 @@
       });
     }();
 
+  !isHeadless && window && !('console' in window) && !function () {
+    context.console.log = function () {};
+  }();
 
   function reset() {
     total = 0;
@@ -87,7 +90,7 @@
       check = li.getElementsByTagName('span')[0];
       document.getElementById('tests').appendChild(li);
     } else {
-      window.console && console.log((name + '...').yellow);
+      console.log((name + '...').yellow);
     }
 
     var start = +new Date;
@@ -131,9 +134,9 @@
   function ok(b, message) {
     if (isHeadless) {
       if (b) {
-        window.console && console.log((message + ' ✓').green);
+        console.log((message + ' ✓').green);
       } else {
-        window.console && console.log((message + ' ✗').red);
+        console.log((message + ' ✗').red);
       }
     } else {
       var li = document.createElement('li');
@@ -158,7 +161,7 @@
   function nextGroup(name, fn) {
     beforeMethods = [];
     afterMethods = [];
-    window.console && console.log(('MODULE: ' + name).magenta);
+    console.log(('MODULE: ' + name).magenta);
     fn(test, ok, before, after);
     currentSetName = name;
     init();
@@ -174,9 +177,9 @@
       if (isHeadless) {
         message = message[allPass ? 0 : 1].toUpperCase();
         if (allPass) {
-          window.console && console.log(message.rainbow);
+          console.log(message.rainbow);
         } else {
-          window.console && console.log(message.red);
+          console.log(message.red);
         }
       }
     }();
