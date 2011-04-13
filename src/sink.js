@@ -27,7 +27,7 @@
     }();
 
   !isHeadless && window && !('console' in window) && !function () {
-    context.console.log = function () {};
+    context.console = {log: function () {}};
   }();
 
   function reset() {
