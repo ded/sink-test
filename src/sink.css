@@ -20,6 +20,12 @@ ol {
   border-radius: 5px;
   padding: 10px;
 }
+ol.sink-pass {
+  background-color: lightgreen;
+}
+ol.sink-failure {
+  background-color: lightpink;
+}
 li {
   margin: 3px 5px;
   padding: 5px;

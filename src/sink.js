@@ -182,14 +182,12 @@
         'Congratulations! All tests have passed!',
         'There were some errors! The suite has failed.'
       ];
-      if (isHeadless) {
-        message = message[allPass ? 0 : 1].toUpperCase();
-        if (allPass) {
-          console.log(message.rainbow);
-        } else {
-          console.log(message.red);
-        }
-      }
+      var color = allPass ? 'rainbow' : 'red',
+          status = allPass ? 'sink-pass' : 'sink-failure';
+      message = message[allPass ? 0 : 1].toUpperCase();
+      isHeadless ?
+        console.log(message[color]) :
+        (document.getElementById('tests').className = status);
     }();
   }
 
