@@ -161,7 +161,15 @@
   function nextGroup(name, fn) {
     beforeMethods = [];
     afterMethods = [];
-    console.log(('MODULE: ' + name).magenta);
+    var mod = ('MODULE: ' + name);
+    if (isHeadless) {
+      console.log(mod.magenta);
+    } else {
+      var li = document.createElement('li');
+      li.innerHTML = mod;
+      document.getElementById('tests').appendChild(li);
+      li.className = 'mod';
+    }
     fn(test, ok, before, after);
     currentSetName = name;
     init();

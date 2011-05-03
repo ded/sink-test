@@ -30,6 +30,8 @@ li {
 ol > li {
   opacity: 0;
   cursor: pointer;
+  background-color: lightblue;
+  color: #000;
 }
 li span {
   color: #aaa;
@@ -49,7 +51,7 @@ li.fail {
 li.pass {
   background-color: #bdfcc9;
 }
-li.pass, li.fail {
+li.pass, li.fail, li.mod {
   -webkit-transition: opacity .5s linear;
   opacity: 1;
 }
