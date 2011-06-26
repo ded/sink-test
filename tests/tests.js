@@ -1,3 +1,9 @@
+if (typeof module !== 'undefined' && module.exports) {
+  var sinktest = require('../src/sink')
+    , sink = sinktest.sink
+    , start = sinktest.start;
+}
+
 sink('first pass', function (test, ok, before, after) {
 
   before(function () {
@@ -35,6 +41,20 @@ sink('secondary set', function (t, k, b, a) {
     k(1, 'one');
     k(2, 'two');
     k(3, 'three');
+  });
+
+});
+
+sink('timeout tests (takes 20 seconds)', function (test, ok, before, after) {
+
+  before(function () {
+    sink.timeout = false;
+  });
+
+  test('should pass a test thing or two', 1, function () {
+    setTimeout(function () {
+      ok(true, 'timeout successfully nulled!');
+    }, 20000)
   });
 
 });

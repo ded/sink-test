@@ -96,7 +96,7 @@
     var start = +new Date;
     fn();
     setTimeout(function() {
-      if (+new Date - start > 10000) {
+      if (sink.timeout && (+new Date - start > sink.timeout)) {
         failure(li, check);
         after();
       } else {
@@ -194,9 +194,11 @@
   if (isHeadless) {
     exports.sink = sink;
     exports.start = start;
+    exports.sink.timeout = 10000;
   } else {
-    context.sink = sink
+    context.sink = sink;
     context.start = start;
+    context.sink.timeout = 10000;
   }
 
 }(this);
