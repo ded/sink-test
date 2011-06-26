@@ -45,6 +45,32 @@ sink('secondary set', function (t, k, b, a) {
 
 });
 
+//logkey is a server feature only
+if (typeof module !== 'undefined' && module.exports) {
+
+  sink('log key', function (test, ok, before, after) {
+
+    test('should set a log key, effectively swallowing all logs not from sink', 1, function () {
+      var log = console.log
+        , count = 0;
+      console.log = function () {
+        count++;
+      }
+      sinktest.setLogKey('@fat::')
+      console.log('1');
+      console.log('2');
+      console.log('3');
+      console.log('@fat::huzzah');
+      console.log('4');
+      console.log('5');
+      console.log = log;
+      sinktest.setLogKey('');
+      ok(count == 1, 'only logs prefixe with log key make it to console');
+    });
+
+  });
+}
+
 sink('timeout tests (takes 20 seconds)', function (test, ok, before, after) {
 
   before(function () {

@@ -6,6 +6,7 @@
   */
 !function(context) {
   var total = 0,
+      logKey = '',
       fail = false,
       modules = [],
       tests = [],
@@ -90,7 +91,7 @@
       check = li.getElementsByTagName('span')[0];
       document.getElementById('tests').appendChild(li);
     } else {
-      console.log((name + '...').yellow);
+      console.log(logKey + (name + '...').yellow);
     }
 
     var start = +new Date;
@@ -134,9 +135,9 @@
   function ok(b, message) {
     if (isHeadless) {
       if (b) {
-        console.log((message + ' ✓').green);
+        console.log(logKey + (message + ' ✓').green);
       } else {
-        console.log((message + ' ✗').red);
+        console.log(logKey + (message + ' ✗').red);
       }
     } else {
       var li = document.createElement('li');
@@ -163,7 +164,7 @@
     afterMethods = [];
     var mod = ('MODULE: ' + name);
     if (isHeadless) {
-      console.log(mod.magenta);
+      console.log(logKey + mod.magenta);
     } else {
       var li = document.createElement('li');
       li.innerHTML = mod;
@@ -186,15 +187,26 @@
           status = allPass ? 'sink-pass' : 'sink-failure';
       message = message[allPass ? 0 : 1].toUpperCase();
       isHeadless ?
-        console.log(message[color]) :
+        console.log(logKey + message[color]) :
         (document.getElementById('tests').className = status);
     }();
+  }
+
+  function setLogKey (key) {
+    var log = console.log;
+    logKey = key || '$__sinkTest::';
+    console.log = function (msg) {
+      if (~(''+msg).indexOf(logKey)) {
+        log(msg.replace(logKey, ''));
+      }
+    }
   }
 
   if (isHeadless) {
     exports.sink = sink;
     exports.start = start;
     exports.sink.timeout = 10000;
+    exports.setLogKey = setLogKey;
   } else {
     context.sink = sink;
     context.start = start;
