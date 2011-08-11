@@ -75,7 +75,9 @@
 
   function bind(li) {
     li.onclick = function() {
-      this.getElementsByTagName('ul')[0].className = 'show';
+      var ul;
+      ul = this.getElementsByTagName('ul')[0];
+      ul.className = (ul.className) ? '' : 'show';
     };
   }
 
