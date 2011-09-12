@@ -74,15 +74,15 @@ if (typeof module !== 'undefined' && module.exports) {
 sink('timeout tests (takes 20 seconds)', function (test, ok, before, after) {
 
   before(function () {
-    sink.timeout = false;
-  });
+    sink.timeout = false
+  })
 
   test('should pass a test thing or two', 1, function () {
     setTimeout(function () {
-      ok(true, 'timeout successfully nulled!');
+      ok(true, 'timeout successfully nulled!')
     }, 20000)
-  });
+  })
 
-});
+})
 
-start();
+start()
