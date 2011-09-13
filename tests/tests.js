@@ -71,10 +71,18 @@ if (typeof module !== 'undefined' && module.exports) {
   });
 }
 
-sink('timeout tests (takes 20 seconds)', function (test, ok, before, after) {
+sink('timeout tests (takes 20 seconds)', function (test, ok, before, after, assert) {
 
   before(function () {
     sink.timeout = false
+  })
+
+  test('should be able to assert stuff. this shows fail', 1, function () {
+    assert(1, 6, 'should have same numbers')
+  })
+
+  test('should be able to assert stuff. this shows pass', 1, function () {
+    assert(2, 2, 'should have same numbers')
   })
 
   test('should pass a test thing or two', 1, function () {

@@ -85,4 +85,15 @@ li ul li {
   padding: 0;
   margin: 2px 0;
   list-style: none;
+  position: relative;
+}
+li b {
+  display: block;
+  margin-left: 40px;
+}
+li em.marker {
+  display: block;
+  position: absolute;
+  right: 5px;
+  top: 0;
 }
