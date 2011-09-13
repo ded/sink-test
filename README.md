@@ -9,11 +9,12 @@ How to write a Sink test
 ------------------------
 
 ``` js
-test('should have foo', 1, function() {
+test('should have foo', 2, function() {
   $.ajax('/foo', function(resp) {
-    ok(resp.stat == '200');
-  });
-});
+    ok(resp.stat == '200')
+    assert(resp.text, 'success', 'should have success')
+  })
+})
 ```
 
 Loading a suite of tests
@@ -22,28 +23,28 @@ Loading a suite of tests
 The above example illustrates the basic syntax of a single test, however loading your tests is done via the *sink* module which exports the test and ok methods. See the example below:
 
 ``` js
-sink('my module', function(test, ok, before, after) {
+sink('my module', function(test, ok, before, after, assert) {
   before(function () {
     // run this before every test
-  });
+  })
 
   after(function () {
     // run this after every test
-  });
+  })
 
   test('should have foo', 2, function () {
-    ok(true, 'this is basically true');
-    ok(1 == 1, 'also true for you math majors');
-  });
-});
+    ok(true, 'this is basically true')
+    ok(1 == 1, 'also true for you math majors')
+  })
+})
 
 sink('another module', function (t, o, b, a) {
   test('a failure', 1, function () {
-    ok(1 == 2, 'should fail');
-  });
-});
+    ok(1 == 2, 'should fail')
+  })
+})
 
-start(); // start all test modules
+start() // start all test modules
 ```
 
 Browser support
@@ -53,20 +54,19 @@ Any browser that supports JavaScript as well as Headless via command line with N
 
 ``` js
 // tests.js
-/** this snippet can be found in src/headless.js */
-var sink = require('path/to/sink');
-var start = sink.start;
-sink = sink.sink;
+var sink = require('sink')
+var start = sink.start
+sink = sink.sink
 
 sink('some module', function (test, ok) {
   // write tests
-});
+})
 
 sink('another module', function (test, ok) {
   // write tests
-});
+})
 
-start();
+start()
 ```
 
 in your terminal
