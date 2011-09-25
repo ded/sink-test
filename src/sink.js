@@ -139,6 +139,7 @@
       else console.log(logKey + msg + (message + ' ✗').red)
     } else {
       var li = document.createElement('li')
+      li.className = b ? 'pass' : 'fail'
       li.innerHTML = msg + ' ' + message + ' ' + '<em class="marker">' + (b ? '✓' : '✗') + '</em>'
       item.appendChild(li)
     }
@@ -153,6 +154,7 @@
       else console.log(logKey + (message + ' ✗').red)
     } else {
       var li = document.createElement('li')
+      li.className = b ? 'pass' : 'fail'
       li.innerHTML = message + ' ' + (b ? '✓' : '✗')
       item.appendChild(li)
     }
