@@ -31,11 +31,12 @@ li {
   padding: 5px;
   -webkit-border-radius: 5px;
   -moz-border-radius: 5px;
+  border-radius: 5px;
   overflow: hidden;
+  cursor: pointer;
 }
 ol > li {
   opacity: 0;
-  cursor: pointer;
   background-color: lightblue;
   color: #000;
 }
@@ -67,6 +68,10 @@ li ul {
   margin: 0;
   padding: 0;
   list-style: none;
+  position: relative; /*early IE overflow bug*/
+}
+li ul.show {
+  position: static; /*early IE overflow bug*/
 }
 li.pass ul.show {
   background-color: #8fffa3;
@@ -79,13 +84,14 @@ li ul.show {
   padding: 5px;
   -webkit-border-radius: 5px;
   -moz-border-radius: 5px;
+  border-radius: 5px;
   margin: 5px;
 }
 li ul li {
-  padding: 0;
+  padding: 3px 6px;
   margin: 2px 0;
   list-style: none;
-  position: relative;
+  font-size: 15px;
 }
 li b {
   display: block;
