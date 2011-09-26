@@ -1,7 +1,7 @@
 {
     "name": "sink-test"
   , "description": "test your javascript - headless, or in the browser"
-  , "version": "0.1.0"
+  , "version": "0.1.1"
   , "author": "Dustin Diaz <polvero@gmail.com> (http://dustindiaz.com)"
   , "keywords": ["testing", "unit tests", "headless", "tdd", "async"]
   , "main": "./src/sink.js"
