@@ -1,7 +1,7 @@
 if (typeof module !== 'undefined' && module.exports) {
   var sinktest = require('../src/sink')
-    , sink = sinktest.sink
-    , start = sinktest.start;
+  sink = sinktest.sink
+  start = sinktest.start
 }
 
 sink('first pass', function (test, ok, before, after) {
@@ -176,9 +176,9 @@ exports['test deepEqual arrays with non-numeric properties'] = function () {
     a1.b = true;
     a2.b = true;
     a2.a = "test"
-    assert['throws'](makeBlock(assert.deepEqual, Object.keys(a1), Object.keys(a2)), assert.AssertionError);
+    //@rvagg Object.keys() not universal: assert['throws'](makeBlock(assert.deepEqual, Object.keys(a1), Object.keys(a2)), assert.AssertionError);
     makeBlock(assert.deepEqual, a1, a2)
-    () //RV
+    () //@rvagg, execute this fn
 };
 
 exports['test deepEqual identical prototype'] = function () {
@@ -260,10 +260,7 @@ exports['test throw AssertionError'] = function () {
   var t, c
   for (t in exports) {
     if (exports.hasOwnProperty(t)) {
-      c = 1
-      if (t === 'test deepEqual arrays with non-numeric properties')
-        c = 2
-      test('CommonJS Unit Testing/1.0: ' + t.replace(/^test /, ''), c, exports[t])
+      test('CommonJS Unit Testing/1.0: ' + t.replace(/^test /, ''), 1, exports[t])
     }
   }
 
@@ -511,7 +508,7 @@ exports['test throw AssertionError'] = function () {
     assert.isHairy('this is not a big hairy monster', 'should not be a big hairy monster')
   })
 
-  test('dual argument custom assert', 3, function () {
+  test('dual argument custom assert', 2, function () {
     assert.add('matchesRegex', function(actual, expected) { return expected.test(actual) })
     assert.matchesRegex('does this match?', / this /, 'should match the regex')
     assert.__negateNext = true
