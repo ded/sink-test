@@ -77,7 +77,7 @@ in your terminal
 Advanced assertion support
 --------------------------
 
-Sink Test follows most of the assert module specified in the (CommonJS Unit-Testing/1.0 assert module)[http://wiki.commonjs.org/wiki/Unit_Testing/1.0] and gives you additional convenience assertions plus an API to define your own assertions.
+Sink Test follows most of the assert module specified in the [CommonJS Unit-Testing/1.0 assert module](http://wiki.commonjs.org/wiki/Unit_Testing/1.0) and gives you additional convenience assertions plus an API to define your own assertions.
 
 Basic assert calls perform a strict equals:
 
@@ -115,14 +115,10 @@ And many additional assertions to make your tests clear and obvious:
 ``` js
 assert.typeOf(value, type, message); // performs a "typeof value == type"
 assert.notTypeOf(value, type, message);
-
-
 assert.isDefined(value, message);
 assert.isUndefined(value, message);
-
 assert.isNull(value, message);
 assert.isNotNull(value, message);
-
 assert.isObject(value, message);
 assert.isFunction(value, message);
 assert.isString(value, message);
