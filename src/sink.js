@@ -130,17 +130,39 @@
     }
   }
 
-  function assert(actual, expected, msg) {
-    var b = actual === expected
-      , message = b ? '' : '<b>actual: ' + actual.toString() + '</b><b>expected: ' + expected.toString() + '</b>'
+  function same(actual, expected) {
+    return actual === expected
+  }
+
+  var toPrintableString = typeof JSON !== 'undefined' && JSON.stringify ? function(o) {
+    if (o instanceof RegExp) return o.toString()
+    return JSON.stringify(o)
+  } : function(o) { return Object.prototype.toString.call(o) }
+
+  function assert(actual, expected, msg, type, fn) {
+    if (typeof type === 'undefined') type = 'same'
+    var b = (fn || same)(actual, expected)
+      , actualStr = toPrintableString(actual)
+      , expectedStr = toPrintableString(expected)
+      , typeStr = 'assert.' + type
+    if (assert.__negateNext) { // a hack to help with testing assert negatives
+      b = !b
+      typeStr = '!' + typeStr
+      delete assert.__negateNext
+    }
     if (isHeadless) {
-      message = b ? '' : '\n\tactual: ' + actual.toString() + '\n\texpected: ' + expected.toString()
+      var message = b ? '' :
+        '\n\t[' + typeStr + ']\n\tactual: ' + actualStr +
+        (fn && fn.length === 1 ? '' : '\n\texpected: ' + expectedStr)
       if (b) console.log(logKey + msg + (message + ' ✓').green)
       else console.log(logKey + msg + (message + ' ✗').red)
     } else {
       var li = document.createElement('li')
+        , message =
+            '<b>[' + typeStr + ']</b><b>actual: ' + actualStr +
+            (fn && fn.length === 1 ? '' : '</b><b>expected: ' + expectedStr + '</b>')
       li.className = b ? 'pass' : 'fail'
-      li.innerHTML = msg + ' ' + message + ' ' + '<em class="marker">' + (b ? '✓' : '✗') + '</em>'
+      li.innerHTML = (msg || '') + ' ' + message + ' ' + '<em class="marker">' + (b ? '✓' : '✗') + '</em>'
       item.appendChild(li)
     }
 
@@ -223,5 +245,130 @@
     context.start = start
     context.sink.timeout = 10000
   }
+
+  //------------------- ASSERTIONS ----------------------//
+
+  // The following code is heavily inspired by BusterJS assertions by @cjno and @augustl 
+  // These assertions are mostly compatible with CommonJS Unit-Testing/1.0.
+
+  var element = typeof document !== 'undefined' && document.createElement('p')
+
+  assert.add = function (type, fn) {
+    assert[type] = function(actual, expected, msg) {
+      if (fn.length === 1) {
+        msg = expected
+        expected = undefined
+      }
+      return assert(actual, expected, msg, type, fn)
+    }
+  }
+
+  function isElement(o) {
+    if (!o || !element || !o.nodeType || o.nodeType !== 1) return false
+    try {
+      o.appendChild(p)
+      o.removeChild(p)
+    } catch (ex) { return false }
+    return true
+  }
+
+  function isArray(o) {
+    return Object.prototype.toString.call(o) === '[object Array]'
+  }
+
+  function isDate(o) {
+    return typeof o.getTime == "function" && o.getTime() == o.valueOf()
+  }
+
+  function keys(o) {
+    var k = []
+    for (var p in o) {
+      if (Object.prototype.hasOwnProperty.call(o, p))
+        k.push(p)
+    }
+    return k
+  }
+
+  // yuk, an approximation of a CommonJS deepEqual method, not recursive-safe
+  function equal(actual, expected) {
+    if (actual === expected) return true
+    if (actual == null || expected == null)
+      return actual == expected
+    if (isElement(actual) || isElement(expected)) return false
+    if (isDate(actual) || isDate(expected))
+      return isDate(actual) && isDate(expected) && actual.getTime() === expected.getTime();
+    if (actual instanceof RegExp && expected instanceof RegExp)
+      return actual.toString() !== expected.toString()
+    if ((typeof actual !== 'object' || typeof expected !== 'object') &&
+        !isArray(actual) && !isArray(expected))
+      return actual == expected // coerce
+    if (typeof actual !== typeof expected) return false
+    var actualKeys = keys(actual)
+      , expectedKeys = keys(expected)
+    if (actualKeys.length !== expectedKeys.length) return false
+    var key, i = 0
+    for (; i < expectedKeys.length; i++) {
+      key = expectedKeys[i]
+      if (!Object.prototype.hasOwnProperty.call(actual, key) || !equal(actual[key], expected[key]))
+        return false
+    }
+    return true
+  }
+
+  assert.add('ok', function(actual) { return actual }, true)
+  assert.add('same', same)
+  assert.add('strictEqual', same)
+  assert.add('notStrictEqual', function(actual, expected) {
+    return !same(actual, expected)
+  })
+  assert.add('notSame', function(actual, expected) {
+    return !same(actual, expected)
+  })
+  assert.add('equal', equal)
+  assert.add('deepEqual', equal)
+  assert.add('notEqual', function(actual, expected) {
+    return !equal(actual, expected)
+  })
+  assert.add('typeOf', function(actual, expected) {
+    return typeof actual === expected
+  })
+  assert.add('notTypeOf', function(actual, expected) {
+    return typeof actual !== expected
+  })
+  assert.add('isDefined', function(actual) {
+    return typeof actual !== 'undefined'
+  })
+  assert.add('isUndefined', function(actual) {
+    return typeof actual === 'undefined'
+  })
+  assert.add('isNull', function(actual) {
+    return actual === null
+  })
+  assert.add('isNotNull', function(actual) {
+    return actual !== null
+  })
+  assert.add('isObject', function(actual) {
+    return typeof actual === 'object' && !!actual
+  })
+  assert.add('isFunction', function(actual) {
+    return typeof actual === 'function'
+  })
+  assert.add('isTrue', function(actual) {
+    return actual === true
+  })
+  assert.add('isFalse', function(actual) {
+    return actual === false
+  })
+  assert.add('isString', function(actual) {
+    return typeof actual === 'string'
+  })
+  assert.add('isBoolean', function(actual) {
+    return typeof actual === 'boolean'
+  })
+  assert.add('isNumber', function(actual) {
+    return typeof actual === 'number' && !isNaN(actual)
+  })
+  assert.add('isArray', isArray)
+  assert.add('isElement', isElement)
 
 }(this)
