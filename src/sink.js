@@ -79,9 +79,38 @@
   }
 
   function _test(name, expect, fn) {
+    var li, check, start
+      , checker = function () {
+          if (sink.timeout && (+new Date - start > sink.timeout)) {
+            failure(li, check)
+            after()
+          } else {
+            if (fail) {
+              failure(li, check)
+              after()
+            } else if (!total) {
+              after()
+              pass(li, check)
+            } else {
+              setTimeout(arguments.callee, 10)
+            }
+          }
+        }
+      , complete = function () {
+          if (total == -1)
+            ok(false, 'No expectations!')
+          total = 0
+        }
+
     before()
-    total = expect
-    var li, check, start = +new Date
+
+    if (typeof expect == 'function') {
+      fn = expect
+      total = -1
+    } else {
+      total = expect
+    }
+
     if (!isHeadless) {
       li = document.createElement('li')
       li.innerHTML = name + ' ... <span>o</span><ul></ul>'
@@ -93,23 +122,10 @@
       console.log(logKey + (name + '...').yellow)
     }
 
-    fn()
-    setTimeout(function() {
-      if (sink.timeout && (+new Date - start > sink.timeout)) {
-        failure(li, check)
-        after()
-      } else {
-        if (fail) {
-          failure(li, check)
-          after()
-        } else if (!total) {
-          after()
-          pass(li, check)
-        } else {
-          setTimeout(arguments.callee, 10)
-        }
-      }
-    }, 10)
+    start = +new Date
+    fn.apply(null, total == -1 ? [ complete ] : [])
+
+    setTimeout(checker, 10)
   }
 
   function test(name, expect, fn) {

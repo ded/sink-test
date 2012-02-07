@@ -71,9 +71,29 @@ if (typeof module !== 'undefined' && module.exports) {
   });
 }
 
+sink('async complete() callback style', function (test, ok, before, after, assert) {
+  test('should not need count', function (complete) {
+    ok(typeof complete == 'function', 'test function argument is a callback')
+    complete()
+  })
+
+  test('should not allow assert/ok-less test (SHOULD FAIL)', function (complete) {
+    complete()
+  })
+
+  test('should work async (3 checks)', function (complete) {
+    setTimeout(function () {
+      ok(true, 'ok() at 500ms delay')
+      ok(true, 'nothing to see here')
+      assert(true, true, 'meaningless assert')
+      complete()
+    }, 500)
+  })
+})
+
 sink('asserts', function (test, ok, before, after, assert) {
 
-  test('should be able to assert stuff. this shows fail', 1, function () {
+  test('should be able to assert stuff (SOULD FAIL)', 1, function () {
     assert(1, 6, 'should have same numbers')
   })
 

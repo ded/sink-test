@@ -3,7 +3,7 @@ Sink Test
 
 An Asynchronous JavaScript Unit Testing Framework designed to run headless, or in the browser.
 
-Sink test is used to test JavaScript that is run asynchronously whereby you tell the test a number of expectations and Sink will tell you if they each pass successfully.
+Sink test is used to test JavaScript that is run asynchronously whereby you can specify the number of expectations and Sink will tell you if they each pass successfully or call an optional `complete()` callback to indicate test completion.
 
 How to write a Sink test
 ------------------------
@@ -13,6 +13,16 @@ test('should have foo', 2, function() {
   $.ajax('/foo', function(resp) {
     ok(resp.stat == '200')
     assert(resp.text, 'success', 'should have success')
+  })
+})
+
+// alternatively:
+
+test('should have foo', function(complete) {
+  $.ajax('/foo', function(resp) {
+    ok(resp.stat == '200')
+    assert(resp.text, 'success', 'should have success')
+    complete()
   })
 })
 ```
