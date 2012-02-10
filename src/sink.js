@@ -232,12 +232,17 @@
             'Congratulations! All tests have passed!'
           , 'There were some errors! The suite has failed.'
         ]
+        , exit = allPass ? 0 : 1
         , color = allPass ? 'rainbow' : 'red'
         , status = allPass ? 'sink-pass' : 'sink-failure'
-      message = message[allPass ? 0 : 1].toUpperCase()
-      isHeadless ?
-        console.log(logKey + message[color]) :
-        (document.getElementById('tests').className = status)
+      message = message[exit].toUpperCase()
+      if (isHeadless) {
+        console.log(logKey + message[color])
+        process.exit(exit)
+      }
+      else {
+        document.getElementById('tests').className = status
+      }
     }()
   }
 
@@ -264,7 +269,7 @@
 
   //------------------- ASSERTIONS ----------------------//
 
-  // The following code is heavily inspired by BusterJS assertions by @cjno and @augustl 
+  // The following code is heavily inspired by BusterJS assertions by @cjno and @augustl
   // These assertions are mostly compatible with CommonJS Unit-Testing/1.0.
 
   var element = typeof document !== 'undefined' && document.createElement('p')
