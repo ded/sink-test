@@ -1,6 +1,6 @@
 /*!
   * Sink - Browser & Headless JavaScript Unit Tester
-  * copyright Dustin Diaz & Jacob Thornton
+  * copyright Dustin Diaz 2012
   * https://github.com/ded/sink-test
   * License MIT
   */
@@ -203,8 +203,8 @@
 
   function sink(name, fn) {
     modules.push({
-      name: name,
-      fn: fn
+        name: name
+      , fn: fn
     })
   }
 
@@ -241,7 +241,7 @@
         process.exit(exit)
       }
       else {
-        document.getElementById('tests').className = status
+        document.getElementById('tests').className = status + ' sink-done'
       }
     }()
   }

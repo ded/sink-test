@@ -1,8 +1,11 @@
 {
     "name": "sink-test"
-  , "description": "test your javascript - headless, or in the browser"
-  , "version": "1.0.1"
+  , "description": "Headless / Browser JavaScript Unit Tester"
+  , "version": "1.0.2"
   , "author": "Dustin Diaz <polvero@gmail.com> (http://dustindiaz.com)"
+  , "contributors": [
+      "Rod Vagg <rod@vagg.org> (http://github.com/rvagg)"
+  ]
   , "keywords": ["testing", "unit tests", "headless", "tdd", "async"]
   , "main": "./src/sink.js"
   , "engines": {

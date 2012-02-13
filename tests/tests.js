@@ -1,49 +1,49 @@
 if (typeof module !== 'undefined' && module.exports) {
   var sinktest = require('../src/sink')
-  sink = sinktest.sink
-  start = sinktest.start
+    , sink = sinktest.sink
+    , start = sinktest.start
 }
 
 sink('first pass', function (test, ok, before, after) {
 
   before(function () {
-    console.log('BEFORE');
-  });
+    console.log('BEFORE')
+  })
 
   after(function () {
-    console.log('AFTER');
-  });
+    console.log('AFTER')
+  })
 
   test('should pass a test thing or two', 2, function () {
-    ok(true, 'first thing');
-    ok(true, 'second thing');
-  });
+    ok(true, 'first thing')
+    ok(true, 'second thing')
+  })
 
   test('should pass even another set of tests a test', 3, function () {
-    ok(1, 'third thing');
-    ok(1, 'fourth thing');
-    ok(1, 'fifth thing');
-  });
+    ok(1, 'third thing')
+    ok(1, 'fourth thing')
+    ok(1, 'fifth thing')
+  })
 
-});
+})
 
 sink('secondary set', function (t, k, b, a) {
 
   b(function () {
-    console.log('secondary before');
-  });
+    console.log('secondary before')
+  })
 
   a(function () {
-    console.log('secondary after');
-  });
+    console.log('secondary after')
+  })
 
   t('many talented people cannot count to three', 3, function () {
-    k(1, 'one');
-    k(2, 'two');
-    k(3, 'three');
-  });
+    k(1, 'one')
+    k(2, 'two')
+    k(3, 'three')
+  })
 
-});
+})
 
 //logkey is a server feature only
 if (typeof module !== 'undefined' && module.exports) {
@@ -52,23 +52,23 @@ if (typeof module !== 'undefined' && module.exports) {
 
     test('should set a log key, effectively swallowing all logs not from sink', 1, function () {
       var log = console.log
-        , count = 0;
+        , count = 0
       console.log = function () {
-        count++;
+        count++
       }
       sinktest.setLogKey('@fat::')
-      console.log('1');
-      console.log('2');
-      console.log('3');
-      console.log('@fat::huzzah');
-      console.log('4');
-      console.log('5');
-      console.log = log;
-      sinktest.setLogKey('');
-      ok(count == 1, 'only logs prefixe with log key make it to console');
-    });
+      console.log('1')
+      console.log('2')
+      console.log('3')
+      console.log('@fat::huzzah')
+      console.log('4')
+      console.log('5')
+      console.log = log
+      sinktest.setLogKey('')
+      ok(count == 1, 'only logs prefixe with log key make it to console')
+    })
 
-  });
+  })
 }
 
 sink('async complete() callback style', function (test, ok, before, after, assert) {
@@ -120,9 +120,9 @@ sink('asserts', function (test, ok, before, after, assert) {
 // strangely meta, no?
 
 function makeBlock(f) {
-    var args = Array.prototype.slice.call(arguments,1);
-    return function(){
-        return f.apply(this, args);
+    var args = Array.prototype.slice.call(arguments, 1)
+    return function () {
+      return f.apply(this, args)
     }
 }
 
@@ -133,95 +133,94 @@ exports['test AssertionError instanceof Error'] = function () {
 */
 
 exports['test ok false'] = function () {
-    assert['throws'](makeBlock(assert.ok, false), assert.AssertionError);
-};
+  assert['throws'](makeBlock(assert.ok, false), assert.AssertionError)
+}
 
-exports['test ok(true)'] = makeBlock(assert.ok, true);
-exports['test ok("test")'] = makeBlock(assert.ok, "test");
+exports['test ok(true)'] = makeBlock(assert.ok, true)
+exports['test ok("test")'] = makeBlock(assert.ok, "test")
 exports['test equal true false'] = function () {
-    assert['throws'](makeBlock(assert.equal, true, false), assert.AssertionError, 'equal');
-};
+  assert['throws'](makeBlock(assert.equal, true, false), assert.AssertionError, 'equal')
+}
 
-exports['test equal null null'] = makeBlock(assert.equal, null, null);
-exports['test equal undefined undefined'] = makeBlock(assert.equal, undefined, undefined);
-exports['test equal null undefined'] = makeBlock(assert.equal, null, undefined);
-exports['test equal 2 "2"'] = makeBlock(assert.equal, 2, "2");
-exports['test equal "2" 2'] = makeBlock(assert.equal, "2", 2);
-exports['test equal true true'] = makeBlock(assert.equal, true, true);
-exports['test notEqual true false'] = makeBlock(assert.notEqual, true, false);
+exports['test equal null null'] = makeBlock(assert.equal, null, null)
+exports['test equal undefined undefined'] = makeBlock(assert.equal, undefined, undefined)
+exports['test equal null undefined'] = makeBlock(assert.equal, null, undefined)
+exports['test equal 2 "2"'] = makeBlock(assert.equal, 2, "2")
+exports['test equal "2" 2'] = makeBlock(assert.equal, "2", 2)
+exports['test equal true true'] = makeBlock(assert.equal, true, true)
+exports['test notEqual true false'] = makeBlock(assert.notEqual, true, false)
 exports['test notEqual true true'] = function () {
-    assert['throws'](makeBlock(assert.notEqual, true, true), assert.AssertionError, 'notEqual');
-};
+  assert['throws'](makeBlock(assert.notEqual, true, true), assert.AssertionError, 'notEqual')
+}
 exports['test strictEqual 2 "2"'] = function () {
-    assert['throws'](makeBlock(assert.strictEqual, 2, "2"), assert.AssertionError, 'strictEqual');
-};
+  assert['throws'](makeBlock(assert.strictEqual, 2, "2"), assert.AssertionError, 'strictEqual')
+}
 exports['test strictEqual null undefined'] = function () {
-    assert['throws'](makeBlock(assert.strictEqual, null, undefined), assert.AssertionError, 'strictEqual');
-};
-exports['test notStrictEqual 2 "2"'] = makeBlock(assert.notStrictEqual, 2, "2");
+  assert['throws'](makeBlock(assert.strictEqual, null, undefined), assert.AssertionError, 'strictEqual')
+}
+exports['test notStrictEqual 2 "2"'] = makeBlock(assert.notStrictEqual, 2, "2")
 
 //deepEquals
 
 //7.2
-exports['test 7.2 deepEqual date'] = makeBlock(assert.deepEqual, new Date(2000,3,14), new Date(2000,3,14));
+exports['test 7.2 deepEqual date'] = makeBlock(assert.deepEqual, new Date(2000, 3, 14), new Date(2000, 3, 14))
 exports['test 7.2 deepEqual date negative'] = function () {
-    assert['throws'](makeBlock(assert.deepEqual, new Date(), new Date(2000,3,14)), assert.AssertionError, 'deepEqual date');
-};
+  assert['throws'](makeBlock(assert.deepEqual, new Date(), new Date(2000,3,14)), assert.AssertionError, 'deepEqual date')
+}
 
 //7.3
-exports['test 7.3 deepEqual 4 "4"'] = makeBlock(assert.deepEqual, 4, "4");
-exports['test 7.3 deepEqual "4" 4'] = makeBlock(assert.deepEqual, "4", 4);
-exports['test 7.3 deepEqual true 1'] = makeBlock(assert.deepEqual, true, 1);
+exports['test 7.3 deepEqual 4 "4"'] = makeBlock(assert.deepEqual, 4, "4")
+exports['test 7.3 deepEqual "4" 4'] = makeBlock(assert.deepEqual, "4", 4)
+exports['test 7.3 deepEqual true 1'] = makeBlock(assert.deepEqual, true, 1)
 exports['test 7.3 deepEqual 4 "5"'] = function () {
-    assert['throws'](makeBlock(assert.deepEqual, 4, "5"));
-};
+  assert['throws'](makeBlock(assert.deepEqual, 4, "5"))
+}
 
 //7.4
 // having the same number of owned properties && the same set of keys
-exports['test 7.4 deepEqual {a:4} {a:4}'] = makeBlock(assert.deepEqual, {a:4}, {a:4});
-exports['test 7.4 deepEqual {a:4,b:"2"} {a:4,b:"2"}'] = makeBlock(assert.deepEqual, {a:4,b:"2"}, {a:4,b:"2"});
-exports['test 7.4 deepEqual [4] ["4"]'] = makeBlock(assert.deepEqual, [4], ["4"]);
+exports['test 7.4 deepEqual {a:4} {a:4}'] = makeBlock(assert.deepEqual, {a:4}, {a:4})
+exports['test 7.4 deepEqual {a:4,b:"2"} {a:4,b:"2"}'] = makeBlock(assert.deepEqual, {a:4,b:"2"}, {a:4,b:"2"})
+exports['test 7.4 deepEqual [4] ["4"]'] = makeBlock(assert.deepEqual, [4], ["4"])
 exports['test 7.4 deepEqual {a:4} {a:4,b:true}'] = function () {
-    assert['throws'](makeBlock(assert.deepEqual, {a:4}, {a:4,b:true}), assert.AssertionError);
-};
+  assert['throws'](makeBlock(assert.deepEqual, {a:4}, {a:4,b:true}), assert.AssertionError)
+}
 
-exports['test deepEqual ["a"], {0:"a"}'] = makeBlock(assert.deepEqual, ["a"], {0:"a"});
-//(although not necessarily the same order),
-exports['test deepEqual {a:4,b:"1"} {b:"1",a:4}'] = makeBlock(assert.deepEqual, {a:4,b:"1"}, {b:"1",a:4});
+exports['test deepEqual ["a"], {0:"a"}'] = makeBlock(assert.deepEqual, ["a"], {0:"a"})
+// (although not necessarily the same order),
+exports['test deepEqual {a:4,b:"1"} {b:"1",a:4}'] = makeBlock(assert.deepEqual, {a:4,b:"1"}, {b:"1",a:4})
 
 exports['test deepEqual arrays with non-numeric properties'] = function () {
-    var a1 = [1,2,3];
-    var a2 = [1,2,3];
-    a1.a = "test";
-    a1.b = true;
-    a2.b = true;
-    a2.a = "test"
-    //@rvagg Object.keys() not universal: assert['throws'](makeBlock(assert.deepEqual, Object.keys(a1), Object.keys(a2)), assert.AssertionError);
-    makeBlock(assert.deepEqual, a1, a2)
-    () //@rvagg, execute this fn
-};
+  var a1 = [1, 2, 3]
+    , a2 = [1, 2, 3]
+  a1.a = "test";
+  a1.b = true;
+  a2.b = true;
+  a2.a = "test"
+  // @rvagg Object.keys() not universal: assert['throws'](makeBlock(assert.deepEqual, Object.keys(a1), Object.keys(a2)), assert.AssertionError);
+  makeBlock(assert.deepEqual, a1, a2)()
+}
 
 exports['test deepEqual identical prototype'] = function () {
     // having an identical prototype property
     var nbRoot = {
-        toString: function(){return this.first+' '+this.last;}
+      toString: function(){return this.first+' '+this.last;}
     }
-    var nameBuilder = function(first,last){
-        this.first = first;
-        this.last = last;
-        return this;
+    var nameBuilder = function (first, last) {
+      this.first = first
+      this.last = last
+      return this
     }
-    nameBuilder.prototype = nbRoot;
-    var nameBuilder2 = function(first,last){
-        this.first = first;
-        this.last = last;
-        return this;
+    nameBuilder.prototype = nbRoot
+    var nameBuilder2 = function (first, last) {
+      this.first = first
+      this.last = last
+      return this
     }
-    nameBuilder2.prototype = nbRoot;
-    var nb1 = new nameBuilder('Ryan', 'Dahl');
-    var nb2 = new nameBuilder2('Ryan','Dahl');
+    nameBuilder2.prototype = nbRoot
+    var nb1 = new nameBuilder('Ryan', 'Dahl')
+      , nb2 = new nameBuilder2('Ryan', 'Dahl')
 
-    assert.deepEqual(nb1, nb2);
+    assert.deepEqual(nb1, nb2)
 
     /* @rvagg: IMO this is garbage and conflicts with the '["a"], {0:"a"}' test above
     nameBuilder2.prototype = Object;
@@ -231,20 +230,20 @@ exports['test deepEqual identical prototype'] = function () {
 };
 
 exports['test deepEqual "a" {}'] = function () {
-    assert['throws'](makeBlock(assert.deepEqual, 'a', {}), assert.AssertionError);
-};
+  assert['throws'](makeBlock(assert.deepEqual, 'a', {}), assert.AssertionError)
+}
 
 exports['test deepEqual "" ""'] = function () {
-    assert.deepEqual("", "");
-};
+  assert.deepEqual("", "")
+}
 
 exports['test deepEqual "" [""]'] = function () {
-    assert['throws'](makeBlock(assert.deepEqual, '', ['']), assert.AssertionError);
-};
+  assert['throws'](makeBlock(assert.deepEqual, '', ['']), assert.AssertionError)
+}
 
 exports['test deepEqual [""] [""]'] = function () {
-    assert.deepEqual([""], [""]);
-};
+  assert.deepEqual([""], [""])
+}
 
 /* @rvagg: not supported
 exports['test throw AssertionError'] = function () {
